@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#087d91">
+  <title>A Little Mermaid's Big Day</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Kaimana Sundaland";
+      src: url("assets/KaimanaSundaland.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+
+    body {
+      min-height: 100svh;
+      display: grid;
+      place-items: stretch;
+      overflow: hidden;
+      background: #063d56;
+      color: white;
+      font-family: Georgia, serif;
+    }
+
+    .invitation {
+      position: relative;
+      isolation: isolate;
+      width: 100vw;
+      height: 100svh;
+      min-height: 0;
+      overflow: hidden;
+      background: #08778b;
+      box-shadow: 0 18px 70px #00182188;
+    }
+
+    .water, .water::after {
+      position: absolute;
+      z-index: -2;
+      inset: -18px;
+      background: url("assets/underwater.png") center / cover no-repeat;
+    }
+
+    .water { filter: blur(3px) saturate(1.08); transform: scale(1.035); }
+
+    .water::after {
+      content: "";
+      inset: 0;
+      background: linear-gradient(180deg, #64e1d74a 0%, #006c8d22 36%, #00172830 73%, #00101d48 100%);
+    }
+
+    .light {
+      position: absolute;
+      z-index: -1;
+      top: -16%; left: 14%;
+      width: 74%; height: 60%;
+      background: linear-gradient(155deg, #efffd326, #affff416 27%, transparent 72%);
+      filter: blur(38px);
+      transform: rotate(10deg);
+      pointer-events: none;
+    }
+
+    .coral {
+      position: absolute;
+      z-index: 0;
+      left: -9%; bottom: -2%;
+      width: 82%; height: 36%;
+      object-fit: contain;
+      object-position: left bottom;
+      filter: drop-shadow(0 -2px 12px #a5eddf42);
+      pointer-events: none;
+    }
+
+    .crown {
+      position: absolute;
+      z-index: 2;
+      top: 7%; left: 14%;
+      width: 72%; height: 13%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px #052a4480);
+      pointer-events: none;
+    }
+
+    .jellyfish {
+      position: absolute;
+      z-index: 1;
+      top: 9%; right: -12%;
+      width: 54%; height: 29%;
+      object-fit: contain;
+      opacity: .72;
+      filter: drop-shadow(0 3px 10px #53caff24);
+      transform: rotate(-5deg);
+      pointer-events: none;
+    }
+
+    .bubbles {
+      position: absolute;
+      z-index: 2;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -12vh;
+      left: var(--left);
+      width: var(--size);
+      aspect-ratio: 1;
+      border: 1px solid #d8fbff70;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, #eaffff80 0 7%, #b8f8ff18 25%, #a6f4ff08 68%);
+      box-shadow: inset -2px -2px 5px #c1faff20, 0 0 8px #adf7ff18;
+      opacity: .55;
+      animation: bubble-rise var(--duration) linear var(--delay) infinite;
+    }
+
+    @keyframes bubble-rise {
+      0% { transform: translate3d(0, 0, 0) scale(.72); opacity: 0; }
+      12% { opacity: .55; }
+      85% { opacity: .42; }
+      100% { transform: translate3d(var(--drift), -120vh, 0) scale(1.12); opacity: 0; }
+    }
+
+    .copy {
+      position: absolute;
+      z-index: 3;
+      top: 26%; left: 4%; right: 4%;
+      text-align: center;
+      color: #e85b9f;
+      font-family: "Caveat", "Brush Script MT", cursive;
+      font-weight: 600;
+      text-shadow: 0 1px 1px #ffd4ec88, 0 2px 12px #091b3ac9;
+      animation: title-enter 1.25s ease-out both;
+    }
+
+    @keyframes title-enter {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .intro {
+      margin: 0 0 2%;
+      font-size: clamp(52px, 11vw, 88px);
+      line-height: 1;
+    }
+
+    .headline {
+      margin: 0;
+      font-size: clamp(70px, 20vw, 116px);
+      line-height: 1.04;
+      letter-spacing: -.015em;
+    }
+
+    .headline span { display: block; white-space: nowrap; }
+
+    .enter {
+      position: absolute;
+      z-index: 4;
+      left: 9%; right: 9%; bottom: 15%;
+      min-height: 64px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #ffffff78;
+      border-radius: 999px;
+      background: linear-gradient(105deg, #536db1dd 0%, #28b5becf 51%, #a53b70df 100%);
+      box-shadow: 0 6px 18px #00162b55, inset 0 1px 1px #ffffff30;
+      color: #fff;
+      font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      font-size: clamp(20px, 6.2vw, 29px);
+      font-weight: 800;
+      text-decoration: none;
+      text-shadow: 0 1px 2px #562b4c;
+      -webkit-text-stroke: 1px #e85b9f;
+      transition: transform .2s ease, filter .2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .enter:hover, .enter:focus-visible { transform: translateY(-3px); filter: brightness(1.12); }
+    .enter:focus-visible { outline: 3px solid white; outline-offset: 4px; }
+
+    .transition-overlay {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      display: none;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .transition-overlay.is-playing { display: block; }
+
+    .transition-overlay canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      mix-blend-mode: screen;
+    }
+
+    .transition-video { display: none; }
+
+    @media (orientation: landscape) and (min-width: 700px) {
+      .invitation { border-radius: 0; }
+      .crown { top: 4%; left: 4%; width: 34%; height: 28%; }
+      .jellyfish { top: 5%; right: 6%; width: 24%; height: 42%; }
+      .coral { left: -3%; bottom: -8%; width: 42%; height: 65%; }
+      .copy { top: 23%; left: 20%; right: 20%; }
+      .intro { font-size: clamp(52px, 6vw, 76px); }
+      .headline { font-size: clamp(96px, 12vw, 180px); }
+      .enter { left: 34%; right: 34%; bottom: 9%; min-height: 68px; }
+    }
+
+    @media (max-width: 380px) {
+      .copy { left: 2%; right: 2%; }
+      .headline { font-size: clamp(58px, 18vw, 70px); }
+      .intro { font-size: clamp(34px, 10vw, 42px); }
+      .enter { left: 7%; right: 7%; min-height: 56px; }
+    }
+
+    @media (max-height: 620px) {
+      .invitation { min-height: 0; }
+      .crown { top: 5%; height: 15%; }
+      .copy { top: 23%; }
+      .enter { bottom: 11%; min-height: 52px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .enter { transition: none; }
+      .copy { animation: none; }
+      .bubble { animation: none; opacity: .2; }
+    }
+  </style>
+</head>
+<body>
+  <main class="invitation" aria-label="Mermaid birthday invitation">
+    <div class="water" aria-hidden="true"></div>
+    <div class="light" aria-hidden="true"></div>
+    <div class="bubbles" aria-hidden="true">
+      <i class="bubble" style="--left: 7%; --size: 18px; --duration: 13s; --delay: -8s; --drift: 24px"></i>
+      <i class="bubble" style="--left: 18%; --size: 10px; --duration: 10s; --delay: -2s; --drift: -18px"></i>
+      <i class="bubble" style="--left: 31%; --size: 24px; --duration: 16s; --delay: -12s; --drift: 20px"></i>
+      <i class="bubble" style="--left: 43%; --size: 12px; --duration: 11s; --delay: -5s; --drift: -26px"></i>
+      <i class="bubble" style="--left: 56%; --size: 16px; --duration: 14s; --delay: -10s; --drift: 18px"></i>
+      <i class="bubble" style="--left: 68%; --size: 9px; --duration: 9s; --delay: -3s; --drift: -16px"></i>
+      <i class="bubble" style="--left: 79%; --size: 21px; --duration: 15s; --delay: -7s; --drift: 28px"></i>
+      <i class="bubble" style="--left: 92%; --size: 13px; --duration: 12s; --delay: -11s; --drift: -20px"></i>
+      <i class="bubble" style="--left: 3%; --size: 14px; --duration: 11s; --delay: -4s; --drift: -22px"></i>
+      <i class="bubble" style="--left: 13%; --size: 22px; --duration: 17s; --delay: -14s; --drift: 30px"></i>
+      <i class="bubble" style="--left: 25%; --size: 11px; --duration: 9s; --delay: -6s; --drift: -14px"></i>
+      <i class="bubble" style="--left: 37%; --size: 19px; --duration: 14s; --delay: -1s; --drift: 24px"></i>
+      <i class="bubble" style="--left: 49%; --size: 27px; --duration: 18s; --delay: -9s; --drift: -28px"></i>
+      <i class="bubble" style="--left: 61%; --size: 12px; --duration: 10s; --delay: -7s; --drift: 18px"></i>
+      <i class="bubble" style="--left: 73%; --size: 17px; --duration: 13s; --delay: -12s; --drift: -25px"></i>
+      <i class="bubble" style="--left: 85%; --size: 25px; --duration: 16s; --delay: -5s; --drift: 20px"></i>
+      <i class="bubble" style="--left: 97%; --size: 10px; --duration: 9s; --delay: -2s; --drift: -16px"></i>
+      <i class="bubble" style="--left: 1%; --size: 9px; --duration: 8s; --delay: -6s; --drift: 15px"></i>
+      <i class="bubble" style="--left: 9%; --size: 15px; --duration: 12s; --delay: -10s; --drift: -24px"></i>
+      <i class="bubble" style="--left: 20%; --size: 8px; --duration: 9s; --delay: -3s; --drift: 18px"></i>
+      <i class="bubble" style="--left: 28%; --size: 17px; --duration: 13s; --delay: -8s; --drift: -20px"></i>
+      <i class="bubble" style="--left: 34%; --size: 11px; --duration: 10s; --delay: -1s; --drift: 14px"></i>
+      <i class="bubble" style="--left: 40%; --size: 14px; --duration: 11s; --delay: -7s; --drift: 25px"></i>
+      <i class="bubble" style="--left: 46%; --size: 8px; --duration: 8s; --delay: -4s; --drift: -15px"></i>
+      <i class="bubble" style="--left: 53%; --size: 19px; --duration: 15s; --delay: -13s; --drift: 22px"></i>
+      <i class="bubble" style="--left: 59%; --size: 10px; --duration: 9s; --delay: -5s; --drift: -18px"></i>
+      <i class="bubble" style="--left: 65%; --size: 15px; --duration: 12s; --delay: -2s; --drift: 19px"></i>
+      <i class="bubble" style="--left: 71%; --size: 8px; --duration: 8s; --delay: -9s; --drift: -15px"></i>
+      <i class="bubble" style="--left: 77%; --size: 18px; --duration: 14s; --delay: -6s; --drift: 26px"></i>
+      <i class="bubble" style="--left: 83%; --size: 10px; --duration: 10s; --delay: -12s; --drift: -17px"></i>
+      <i class="bubble" style="--left: 89%; --size: 14px; --duration: 11s; --delay: -3s; --drift: 21px"></i>
+      <i class="bubble" style="--left: 95%; --size: 8px; --duration: 8s; --delay: -7s; --drift: -14px"></i>
+    </div>
+    <img class="coral" src="assets/coral.png" alt="" aria-hidden="true">
+    <img class="jellyfish" src="assets/jellyfish.png" alt="" aria-hidden="true">
+    <img class="crown" src="assets/crown.png" alt="" aria-hidden="true">
+    <section class="copy" aria-label="A little Mermaid's Big Day!">
+      <br><br><br?
+      <h3 class="intro">A little</h3>
+      <h1 class="headline"><span>Mermaid's</span><span>Big Day!</span></h1>
+    </section>
+    <a class="enter" id="dive-link" href="body.html" aria-label="Let's dive in">Let's Dive In!</a>
+    <audio id="ambience" src="assets/underwater-ambience.mp3" autoplay loop preload="auto"></audio>
+    <audio id="transition-whoosh" src="assets/transition-whoosh.mp3" preload="auto"></audio>
+    <div class="transition-overlay" id="transition-overlay" aria-hidden="true"><canvas id="transition-canvas"></canvas></div>
+    <video class="transition-video" id="transition-video" src="assets/bubble-transition.mp4" muted playsinline preload="auto"></video>
+  </main>
+  <script>
+    const ambience = document.getElementById("ambience");
+    ambience.volume = 0.45;
+
+    const startAmbience = () => {
+      ambience.play().then(() => {
+        document.removeEventListener("pointerdown", startAmbience);
+        document.removeEventListener("keydown", startAmbience);
+      }).catch(() => {});
+    };
+
+    startAmbience();
+    document.addEventListener("pointerdown", startAmbience);
+    document.addEventListener("keydown", startAmbience);
+
+    const diveLink = document.getElementById("dive-link");
+    const transitionWhoosh = document.getElementById("transition-whoosh");
+    const transitionVideo = document.getElementById("transition-video");
+    const transitionOverlay = document.getElementById("transition-overlay");
+    const transitionCanvas = document.getElementById("transition-canvas");
+    const transitionContext = transitionCanvas.getContext("2d", { willReadFrequently: true });
+    let transitionFrame;
+
+    const drawTransition = () => {
+      if (transitionVideo.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+        transitionFrame = requestAnimationFrame(drawTransition);
+        return;
+      }
+
+      const width = transitionCanvas.width;
+      const height = transitionCanvas.height;
+      const scale = Math.max(width / transitionVideo.videoWidth, height / transitionVideo.videoHeight);
+      const drawWidth = transitionVideo.videoWidth * scale;
+      const drawHeight = transitionVideo.videoHeight * scale;
+      transitionContext.clearRect(0, 0, width, height);
+      transitionContext.drawImage(transitionVideo, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
+
+      const frame = transitionContext.getImageData(0, 0, width, height);
+      const pixels = frame.data;
+      for (let i = 0; i < pixels.length; i += 4) {
+        const red = pixels[i];
+        const green = pixels[i + 1];
+        const blue = pixels[i + 2];
+        const greenExcess = Math.min(green - red, green - blue);
+        if (green > 75 && greenExcess > 24) {
+          pixels[i + 3] = Math.max(0, 255 - (greenExcess - 24) * 10);
+          if (pixels[i + 3] > 0) pixels[i + 1] = Math.min(green, Math.max(red, blue) + 18);
+        }
+      }
+      transitionContext.putImageData(frame, 0, 0);
+      transitionFrame = requestAnimationFrame(drawTransition);
+    };
+
+    diveLink.addEventListener("click", (event) => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      event.preventDefault();
+      const ambienceStartVolume = ambience.volume;
+      const fadeStartedAt = performance.now();
+      const fadeAmbience = (now) => {
+        const progress = Math.min((now - fadeStartedAt) / 350, 1);
+        ambience.volume = ambienceStartVolume + (0.12 - ambienceStartVolume) * progress;
+        if (progress < 1) requestAnimationFrame(fadeAmbience);
+      };
+      requestAnimationFrame(fadeAmbience);
+      transitionWhoosh.currentTime = 0;
+      transitionWhoosh.volume = 0.78;
+      transitionCanvas.width = Math.min(window.innerWidth, 960);
+      transitionCanvas.height = Math.round(transitionCanvas.width * window.innerHeight / window.innerWidth);
+      transitionOverlay.classList.add("is-playing");
+      transitionVideo.currentTime = 0;
+      drawTransition();
+      transitionWhoosh.play().catch(() => {});
+      transitionVideo.play().catch(() => {
+        transitionWhoosh.pause();
+        window.location.href = diveLink.href;
+      });
+    });
+
+    transitionVideo.addEventListener("ended", () => {
+      cancelAnimationFrame(transitionFrame);
+      transitionWhoosh.pause();
+      window.location.href = diveLink.href;
+    });
+  </script>
+</body>
+</html>

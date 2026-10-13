@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ec268d">
+  <title>A Special Day!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+
+    body {
+      min-height: 100svh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background: #003e70;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    p { font-family: "Irish Grover", cursive; }
+
+    .scroll-fade {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 1s ease, transform 1s ease;
+      will-change: opacity, transform;
+    }
+
+    .scroll-fade.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scene {
+      position: relative;
+      isolation: isolate;
+      width: 100%;
+      min-height: max(100svh, 496vw);
+      overflow: clip;
+    }
+
+    .scene::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background:
+        linear-gradient(180deg, #ed178d36 0%, #c52ca365 22%, #722ca075 42%, #05649438 68%, #00376022 100%),
+        url("assets/coral-reef-background.png") center / 100% 100% no-repeat;
+      pointer-events: none;
+    }
+
+    .bubbles {
+      position: absolute;
+      z-index: 2;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bubble {
+      position: absolute;
+      top: var(--top);
+      left: var(--left);
+      width: var(--size);
+      aspect-ratio: 1;
+      border: 1px solid #d8fbff70;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 28%, #eaffff80 0 7%, #b8f8ff18 25%, #a6f4ff08 68%);
+      box-shadow: inset -2px -2px 5px #c1faff20, 0 0 8px #adf7ff22;
+      opacity: .55;
+      animation: bubble-rise var(--duration) linear var(--delay) infinite;
+    }
+
+    @keyframes bubble-rise {
+      0% { transform: translate3d(0, 0, 0) scale(.72); opacity: 0; }
+      12% { opacity: .55; }
+      85% { opacity: .42; }
+      100% { transform: translate3d(var(--drift), -120vh, 0) scale(1.12); opacity: 0; }
+    }
+
+    .hero {
+      position: relative;
+      height: clamp(430px, 135vw, 540px);
+      overflow: hidden;
+      background: linear-gradient(180deg, #ed168f 0%, #e927a1 29%, #bd66c8 58%, #72c8e2 82%, #54c9e4 100%);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 30%;
+      background: url("assets/coral-reef-background.png") center 45% / 100% auto no-repeat;
+      opacity: .52;
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 60%);
+      mask-image: linear-gradient(180deg, transparent 0%, #000 60%);
+      pointer-events: none;
+    }
+
+    .shell-border {
+      position: absolute;
+      z-index: 3;
+      top: -1%;
+      left: 0;
+      width: 100%;
+      height: auto;
+      pointer-events: none;
+    }
+
+    .hero-art {
+      position: absolute;
+      z-index: 2;
+      left: 50%;
+      top: 12%;
+      width: min(76vw, 370px);
+      transform: translateX(-50%);
+    }
+
+    .baby-mermaid {
+      display: block;
+      width: 100%;
+      height: auto;
+      animation: ariel-rise .75s ease-out both;
+    }
+
+    .ariel {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 44%;
+      height: auto;
+      animation: ariel-rise .75s ease-out both;
+      filter: drop-shadow(0 5px 5px #15486635);
+    }
+
+    @keyframes ariel-rise {
+      from { opacity: 0; transform: translateY(26px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pearl-banner {
+      position: absolute;
+      z-index: 4;
+      left: 50%;
+      bottom: -6%;
+      width: 100%;
+      height: auto;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .title {
+      position: absolute;
+      z-index: 4;
+      left: 4%;
+      right: 4%;
+      bottom: 3%;
+      margin: 0;
+      color: #fff;
+      font-size: clamp(28px, 8vw, 44px);
+      font-weight: 800;
+      line-height: 1;
+      text-align: center;
+      text-shadow: 0 2px 0 #2a68c4, 0 4px 7px #172e7a9c;
+    }
+
+    .details {
+      position: relative;
+      width: min(100%, 760px);
+      margin: 0 auto;
+      min-height: clamp(1180px, 361vw, 1415px);
+      padding: 12px 18px min(25vw, 100px);
+      background:
+        url("assets/reef-gradient-overlay.png") center 55% / 100% 111.7% no-repeat,
+        linear-gradient(180deg, #07436a35 0%, #083f6940 42%, #062d5d55 100%);
+      color: #fff;
+      text-align: center;
+    }
+
+    .details > * {
+      position: relative;
+      z-index: 3;
+    }
+
+    .invitation-copy {
+      margin: 0 auto;
+      max-width: 620px;
+      font-family: "Irish Grover", cursive;
+      font-size: clamp(12px, 3.1vw, 14px);
+      font-weight: 600;
+      line-height: 1.38;
+      -webkit-text-stroke: .35px #78c9ff;
+      text-shadow: -1px -1px 0 #13568d, 1px -1px 0 #13568d, -1px 1px 0 #13568d, 1px 1px 0 #13568d, 0 2px 4px #07204dcc;
+    }
+
+    .invitation-copy p { margin: 0 0 12px; }
+    .invitation-copy .signoff { margin-bottom: 10px; }
+    .invitation-copy .japanese { margin-top: 22px; line-height: 1.55; }
+
+    .godparents-title {
+      margin: 28px 0 14px;
+      font-size: clamp(28px, 8.2vw, 44px);
+      font-weight: 900;
+      line-height: 1.05;
+      -webkit-text-stroke: 1px #ffd0fa;
+      text-shadow: 0 3px 0 #5634ac, 0 5px 8px #071c66cc;
+    }
+
+    .godparents {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 520px;
+      margin: 0 auto;
+      color: #fff;
+      font-family: "Irish Grover", cursive;
+      font-size: clamp(18px, 5.1vw, 25px);
+      font-weight: 700;
+      line-height: 1.32;
+      -webkit-text-stroke: .65px #f59acb;
+      text-shadow: -1px -1px 0 #9a326f, 1px -1px 0 #9a326f, -1px 1px 0 #9a326f, 1px 1px 0 #9a326f, 0 3px 6px #081c58;
+    }
+
+    .godparents ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .info-section {
+      margin: 34px auto 0;
+      font-family: Georgia, "Yu Mincho", serif;
+      font-size: clamp(14px, 3.9vw, 17px);
+      font-weight: 700;
+      line-height: 1.45;
+      -webkit-text-stroke: .3px #93d9ff;
+      text-shadow: -1px -1px 0 #164d8b, 1px -1px 0 #164d8b, -1px 1px 0 #164d8b, 1px 1px 0 #164d8b, 0 2px 4px #071e59;
+    }
+
+    .info-section h2 {
+      margin: 0 0 14px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(34px, 9vw, 46px);
+      font-weight: 900;
+      line-height: 1;
+      -webkit-text-stroke: 1px #ffd0fa;
+      text-shadow: 0 3px 0 #5634ac, 0 5px 8px #071c66cc;
+    }
+
+    .info-section p { margin: 0 0 12px; }
+    .info-section[aria-labelledby="venue-title"] p { -webkit-text-stroke: .45px #ff78c8; }
+    .venue-link { color: #fff; overflow-wrap: anywhere; }
+    .section-spacer { margin-top: 44px; }
+
+    .rsvp-title {
+      margin: 38px 0 14px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(28px, 8.6vw, 42px);
+      font-weight: 900;
+      line-height: 1.2;
+      -webkit-text-stroke: 1px #ffd0fa;
+      text-shadow: 0 3px 0 #5634ac, 0 5px 8px #071c66cc;
+    }
+
+    .godparents-title span,
+    .info-section h2 span,
+    .rsvp-title span {
+      display: inline-block;
+      color: #ff72c9;
+      background-image: linear-gradient(90deg, #e9a1ff 0%, #ff5cae 42%, #ff72c9 64%, #43e8ed 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .rsvp-button {
+      display: block;
+      width: min(100%, 390px);
+      margin: 20px auto 30px !important;
+      padding: 12px 18px;
+      border: 1px solid #ffffff99;
+      border-radius: 999px;
+      background: linear-gradient(105deg, #5266b9 0%, #26b8c9 52%, #c02f91 100%);
+      box-shadow: 0 7px 20px #00172d70, inset 0 1px 2px #ffffff70;
+      color: #fff;
+      font-family: "Irish Grover", cursive;
+      font-size: clamp(20px, 5.8vw, 28px);
+      font-weight: 800;
+      text-align: center;
+      text-decoration: none;
+      -webkit-text-stroke: .7px #fa258d;
+      text-shadow: 0 2px 3px #74155f;
+    }
+
+    .bottom-art {
+      position: absolute;
+      z-index: 3;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: min(68vw, 280px);
+      pointer-events: none;
+    }
+
+    .bottom-art img { position: absolute; height: auto; pointer-events: none; }
+
+    .bottom-vignette {
+      z-index: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      opacity: .55;
+    }
+
+    .mermaid-scales {
+      z-index: 1;
+      bottom: 0;
+      left: 50%;
+      width: min(100vw, 390px);
+      transform: translateX(-50%);
+    }
+
+    .bottom-coral-left {
+      z-index: 2;
+      bottom: 0;
+      left: 0;
+      width: min(48vw, 190px);
+    }
+
+    .bottom-coral-right {
+      z-index: 2;
+      right: 0;
+      bottom: 0;
+      width: min(49vw, 194px);
+    }
+
+    @media (max-width: 360px) {
+      .hero-art { top: 12%; width: 76vw; }
+      .title { bottom: 3%; font-size: clamp(28px, 8.5vw, 34px); }
+      .details { padding-right: 12px; padding-left: 12px; }
+    }
+
+    @media (orientation: landscape) and (min-width: 700px) {
+      .scene { min-height: max(100svh, 1600px); }
+      .details { min-height: 1100px; }
+
+      .hero { height: clamp(500px, 42vw, 680px); }
+
+      .shell-border {
+        top: -3%;
+        left: 50%;
+        width: min(72vw, 760px);
+        transform: translateX(-50%);
+      }
+
+      .hero-art {
+        top: 16%;
+        width: min(50vw, 500px);
+      }
+
+      .ariel { width: 44%; }
+
+      .pearl-banner {
+        bottom: -6%;
+        width: min(72vw, 760px);
+      }
+
+      .title {
+        bottom: 6%;
+        font-size: clamp(36px, 4.2vw, 56px);
+      }
+
+      .details { padding: 24px 32px 100px; }
+      .invitation-copy { font-size: clamp(17px, 1.7vw, 20px); }
+      .hero .title { bottom: 6%; }
+      .info-section { font-size: clamp(18px, 1.6vw, 21px); }
+    }
+
+    @media (max-height: 520px) and (orientation: landscape) {
+      .hero { height: 440px; }
+      .hero-art { width: min(58vh, 360px); top: 18%; }
+      .shell-border { width: min(58vw, 600px); }
+      .pearl-banner { width: min(54vw, 600px); bottom: -6%; }
+      .title { bottom: 6%; font-size: clamp(28px, 4vw, 42px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .baby-mermaid, .ariel { animation: none; }
+      .scroll-fade { opacity: 1; transform: none; transition: none; }
+      .bubble { animation: none; opacity: .2; }
+    }
+  </style>
+</head>
+<body>
+  <main class="scene" aria-label="A special mermaid day">
+    <audio id="body-ambience" src="assets/body-underwater.mp3" autoplay loop preload="auto"></audio>
+    <div class="bubbles" aria-hidden="true"></div>
+    <section class="hero" aria-label="Mermaid birthday artwork">
+      <img class="shell-border" src="assets/shell-border.png" alt="" aria-hidden="true">
+      <div class="hero-art">
+        <img class="baby-mermaid" src="assets/baby-mermaid.png" alt="A baby mermaid surrounded by colorful coral and flowers">
+        <img class="ariel" src="assets/ariel-mermaid.png" alt="Ariel the little mermaid">
+      </div>
+      <img class="pearl-banner" src="assets/pearl-banner.png" alt="" aria-hidden="true">
+      <h1 class="title">A Special Day!</h1>
+    </section>
+
+    <section class="details" aria-label="Birthday dedication details">
+      <div class="invitation-copy">
+        <p class="signoff">With love,<br>Ryusei &amp; Carmina</p>
+        <p>Invite you to celebrate our daughter Manami’s Dedication &amp; 1st Birthday.</p>
+        <p>We’ll begin by dedicating her to God, followed by a celebration of her first year. We’d love to have you with us on this special day.</p>
+        <p class="japanese" lang="ja">娘のまなみの献児式と初めてのお誕生日を、一緒にお祝いしていただけたら嬉しいです。<br>神様にまなみを捧げる献児式から始まり、その後、彼女の最初のお誕生日をお祝いします。大切な一日を一緒に過ごしていただけたら嬉しいです。</p>
+      </div>
+
+      <h2 class="godparents-title"><span>HER GODPARENTS</span></h2>
+      <div class="godparents" aria-label="Godparents">
+        <ul><li>Irvin</li><li>Allan</li><li>Ian</li><li>Sergey</li><li>Harvey</li><li>Paolo</li></ul>
+        <ul><li>Hannah</li><li>Bianca</li><li>Miho</li><li>Priscilla</li><li>Kazusa</li><li>Lot</li></ul>
+      </div>
+
+      <section class="info-section section-spacer" aria-labelledby="details-title">
+        <h2 id="details-title"><span>THE DETAILS</span></h2>
+        <p>DECEMBER 20, 2026 · SUNDAY<br>12月20日（日）</p>
+        <p><strong>DEDICATION CEREMONY – 13:00<br>BIRTHDAY CELEBRATION – 13:30</strong></p>
+        <p>You’re welcome to join us for the dedication, or simply come for the birthday celebration afterward—whatever feels most comfortable for you.</p>
+      </section>
+
+      <section class="info-section section-spacer" aria-labelledby="venue-title">
+        <h2 id="venue-title"><span>VENUE</span></h2>
+        <p>Oukatei 2F<br>4-40-1 Hanahata, Adachi-ku, Tokyo<br>桜花亭 2F<br>足立区花畑4丁目40番1号<br><a class="venue-link" href="https://www.adachiku-oukatei.jp/access/" target="_blank" rel="noopener noreferrer">https://www.adachiku-oukatei.jp/access/</a></p>
+      </section>
+
+      <section class="info-section section-spacer" aria-labelledby="wear-title">
+        <h2 id="wear-title"><span>WHAT TO WEAR</span></h2>
+        <p><strong>Godparents:</strong> We kindly invite you to wear white to create a beautiful and coordinated look during Manami’s dedication.</p>
+        <p><strong>Everyone else:</strong> Come as you are!</p>
+      </section>
+
+      <h2 class="rsvp-title"><span>Please RSVP by<br>December 1st</span></h2>
+      <a class="rsvp-button" href="https://docs.google.com/forms/d/e/1FAIpQLSc24MTuqW8HF73MVCFh47-YnI8M9Hb4ZphlpzbD9ZayQln8yQ/viewform" target="_blank" rel="noopener noreferrer">RSVP HERE!</a>
+    </section>
+
+    <div class="bottom-art" aria-hidden="true">
+      <img class="bottom-vignette" src="assets/soft-vignette.png" alt="">
+      <img class="mermaid-scales" src="assets/mermaid-scales.png" alt="">
+      <img class="bottom-coral-left" src="assets/bottom-coral-left.png" alt="">
+      <img class="bottom-coral-right" src="assets/bottom-coral-right.png" alt="">
+    </div>
+  </main>
+  <script>
+    const bodyAmbience = document.getElementById("body-ambience");
+    bodyAmbience.volume = 0.4;
+
+    const startBodyAmbience = () => {
+      bodyAmbience.play().then(() => {
+        document.removeEventListener("pointerdown", startBodyAmbience);
+        document.removeEventListener("keydown", startBodyAmbience);
+      }).catch(() => {});
+    };
+
+    startBodyAmbience();
+    document.addEventListener("pointerdown", startBodyAmbience);
+    document.addEventListener("keydown", startBodyAmbience);
+
+    const scene = document.querySelector(".scene");
+    const bubbleLayers = document.querySelectorAll(".bubbles");
+    const bubbleCount = Math.ceil((scene.scrollHeight / Math.max(window.innerHeight, 1)) * 42);
+
+    bubbleLayers.forEach((layer) => {
+      for (let i = 0; i < bubbleCount; i += 1) {
+        const bubble = document.createElement("i");
+        const duration = 9 + (i * 11) % 15;
+        const left = (i * 61.8) % 100;
+        const top = ((i + 0.5) / bubbleCount) * 100;
+        const size = 7 + (i * 17) % 19;
+        const drift = (i * 31) % 65 - 32;
+        bubble.className = "bubble";
+        bubble.style.setProperty("--left", `${left}%`);
+        bubble.style.setProperty("--top", `${top}%`);
+        bubble.style.setProperty("--size", `${size}px`);
+        bubble.style.setProperty("--duration", `${duration}s`);
+        bubble.style.setProperty("--delay", `-${(i * 7) % duration}s`);
+        bubble.style.setProperty("--drift", `${drift}px`);
+        layer.appendChild(bubble);
+      }
+    });
+
+    const scrollFadeItems = document.querySelectorAll("p, .rsvp-button");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      scrollFadeItems.forEach((item) => item.classList.add("is-visible"));
+    } else {
+      scrollFadeItems.forEach((item) => item.classList.add("scroll-fade"));
+
+      const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle("is-visible", entry.isIntersecting);
+        });
+      }, { threshold: 0.12 });
+
+      scrollFadeItems.forEach((item) => fadeObserver.observe(item));
+    }
+  </script>
+</body>
+</html>
